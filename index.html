@@ -45,5 +45,14 @@
             </div>
         </div>
         <script src="calc-v2.js"></script>
+        <script>
+            (function () {
+                "use strict";
+
+                var calc = new window.Calculator(document.getElementById("calc"));
+
+                window.calc = calc;
+            })();
+        </script>
     </body>
 </html>

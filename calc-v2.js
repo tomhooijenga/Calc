@@ -24,9 +24,14 @@
         }
 
         // Add keypress handler to window.
-        window.addEventListener("keyup", function (e) {
+        window.addEventListener("keydown", function (e) {
             var key = e.which || e.keyCode;
-            self.keyPress(key);
+            self.keyPress(key, e);
+
+            // We shouldn't go back on backspace;
+            if (key === 8) {
+                e.preventDefault();
+            }
         });
     };
 
@@ -147,8 +152,8 @@
 
     // Remove last char from display/calculation.
     Calculator.prototype.backspace = function () {
-        this.screen.innerHTML = this.screen.innerHTML.slice(0, -1) || 0;
-        this.calculation = this.calculation.slice(0, -1) || 0;
+        this.screen.innerHTML = this.screen.innerHTML.slice(0, -1) || "0";
+        this.calculation = this.calculation.slice(0, -1) || "0";
     };
 
     Calculator.prototype.dot = function () {
@@ -186,7 +191,7 @@
         this.screen.innerHTML += "&pi;";
         this.calculation += Math.PI;
         this.isAnswer = false;
-    }
+    };
     // Various operations.
     Calculator.prototype.plus = function () {
         this.screen.innerHTML += "+";
@@ -227,12 +232,4 @@
     };
 
     window.Calculator = Calculator;
-})();
-
-(function () {
-    "use strict";
-
-    var calc = new window.Calculator(document.getElementById("calc"));
-
-    window.calc = calc;
 })();
