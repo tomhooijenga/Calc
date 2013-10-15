@@ -188,8 +188,13 @@
     };
 
     Calculator.prototype.pi = function () {
-        this.screen.innerHTML += "&pi;";
-        this.calculation += Math.PI;
+        if (this.screen.innerHTML === "0" || this.isAnswer) {
+            this.screen.innerHTML = "&pi;";
+            this.calculation = Math.PI;
+        } else {
+            this.screen.innerHTML += "&pi;";
+            this.calculation += Math.PI;
+        }
         this.isAnswer = false;
     };
     // Various operations.
