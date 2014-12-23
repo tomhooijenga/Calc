@@ -3,6 +3,7 @@ html {
     height: 100%;
     width: 100%;
 }
+
 body {
     background: #f5f5f5;
     font-size: 20px;
@@ -13,40 +14,45 @@ body {
     display: table-cell;
     vertical-align: middle;
 }
+
 .clearfix {
-  *zoom: 1;
+    *zoom: 1;
 }
+
 .clearfix:before,
 .clearfix:after {
-  display: table;
-  line-height: 0;
-  content: "";
+    display: table;
+    line-height: 0;
+    content: "";
 }
+
 .clearfix:after {
-  clear: both;
+    clear: both;
 }
 
 #calc {
     width: 50%;
     margin: 0 auto;
     padding: 2.5%;
-    border: 1px solid #ccc;
+    border: 1px solid #bdc3c7;
     background-color: #fff;
 }
+
 .screen {
     margin-bottom: 5%;
     line-height: 2.5em;
-    border: solid #ccc;
-    border-width: 1px;
+    border: solid #bdc3c7;
     text-align: center;
     width: 75%;
     float: left;
     border-width: 1px 0;
     overflow: hidden;
 }
+
 .wrap {
     margin: 0 -1%;
 }
+
 button {
     display: block;
     color: #fff;
@@ -66,10 +72,13 @@ button {
     -ms-transition: all .1s linear;
     -o-transition: all .1s linear;
     transition: all .1s linear;
+    outline: none;
 }
+
 button:hover {
     background-color: #a7cff7;
 }
+
 button:active {
     -moz-transform: scale(.95);
     -webkit-transform: scale(.95);
@@ -77,46 +86,54 @@ button:active {
     -ms-transform: scale(.95);
     transform: scale(.95)
 }
+
 button.double {
     width: 48%;
 }
-button[disabled] {
-    background-color: #ccc;
+
+button[disabled],
+button[disabled]:hover {
+    background-color: #bdc3c7;
     cursor: default;
 }
-button[disabled]:hover {
-    background-color: #ccc;
-}
+
 .number {
     background-color: #8fc2f5;
 }
+
 .number:hover {
-   background-color:  #77b6f3;
+    background-color: #77b6f3;
 }
+
 .pi {
     text-transform: none;
 }
-.prev, .next {
+
+.prev,
+.next {
     width: 12.5%;
     margin: 0 0 1% 0;
 }
+
 .prev {
     float: left;
-    -webkit-border-radius: 4px 0px 0px 4px;
-    border-radius: 4px 0px 0px 4px;
+    -webkit-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
 }
+
 .next {
     float: right;
     -webkit-border-radius: 0 4px 4px 0;
     border-radius: 0 4px 4px 0;
 }
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
     #calc {
         width: 60%
-    }    
+    }
 }
- 
+
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     #calc {
@@ -124,27 +141,30 @@ button[disabled]:hover {
         padding: 2.5%;
     }
 }
- 
+
 /* Landscape phones and down */
 @media (max-width: 480px) {
     #calc {
         padding: 2.5%;
         width: auto;
     }
+
     .screen {
         width: 100%;
         margin: 5% 0;
-        border: 1px solid #ccc;
+        border: 1px solid #bdc3c7;
         line-height: 2em;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         -webkit-border-radius: 4px;
         border-radius: 4px;
     }
+
     button {
         font-size: .6em;
         line-height: 3em;
     }
+
     .prev, .next {
         width: 49%;
         border-radius: 0;
