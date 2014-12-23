@@ -20,35 +20,35 @@
         for (i = 0; i < length; i++) {
             buttons[i].addEventListener("click", function () {
                 self.buttonPress(this);
-            }, false);
+            });
         }
 
         // Add keypress handler to window.
         window.addEventListener("keydown", function (e) {
             var key = e.which || e.keyCode;
-            self.keyPress(key, e);
 
             // We shouldn't go back on backspace;
             if (key === 8) {
                 e.preventDefault();
             }
+
+            if (e.shiftKey) {
+                key = 's' + key;
+            }
+
+            self.keyPress(key);
         });
     };
 
     // Handles buttonpress events.
     Calculator.prototype.buttonPress = function (button) {
         // Checks if button.value is a function of Calculator.
-        if (button.value !== "" && typeof this[button.value] === "function") {
+        if (typeof this[button.value] === "function") {
             this[button.value]();
         } else {
-            if (this.screen.innerHTML === "0" || this.isAnswer) {
-                this.screen.innerHTML = button.innerHTML;
-                this.calculation = button.innerHTML;
-                this.isAnswer = false;
-            } else {
-                this.screen.innerHTML += button.innerHTML;
-                this.calculation += button.innerHTML;
-            }
+            var text = button.innerHTML;
+
+            this.print(text, text, true);
         }
     };
 
@@ -59,14 +59,7 @@
         } else if (typeof this.keyCodes[key] === "string") {
             var text = this.keyCodes[key];
 
-            if (this.screen.innerHTML === "0" || this.isAnswer) {
-                this.screen.innerHTML = text;
-                this.calculation = text;
-                this.isAnswer = false;
-            } else {
-                this.screen.innerHTML += text;
-                this.calculation += text;
-            }
+            this.print(text, text, true);
         }
     };
 
@@ -144,6 +137,19 @@
         }
     };
 
+    Calculator.prototype.print = function (display, calculation, clear)
+    {
+        if (clear && (this.screen.innerHTML === "0" || this.isAnswer)) {
+            this.screen.innerHTML = display;
+            this.calculation = calculation;
+        } else {
+            this.screen.innerHTML += display;
+            this.calculation += calculation;
+        }
+
+        this.isAnswer = false;
+    };
+
     // Reset display.
     Calculator.prototype.clear = function () {
         this.screen.innerHTML = "0";
@@ -157,66 +163,42 @@
     };
 
     Calculator.prototype.dot = function () {
-        if (this.isAnswer) {
-            this.screen.innerHTML = "0.";
-            this.calculation = "0.";
-            this.isAnswer = false;
-        } else {
-            var lastNumber = this.screen.innerHTML.match(/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/g).pop(),
-                lastChar = this.screen.innerHTML.slice(-1) || 0;
+        var last = this.calculation.match(/([-+]?[0-9]+\.?[0-9]*[eE]?[0-9]*)/g).pop();
 
-            // You can has dot if:
-            // Contains no dot AND contains no exponent OR lastChar is no number AND is no dot.
-            if (/\.|e/.test(lastNumber) === false || (/\d/.test(lastChar) === false && lastChar !== ".")) {
-                this.screen.innerHTML += ".";
-                this.calculation += ".";
-            }
+        if (last.indexOf('.') === -1)
+        {
+            this.print('.', '.', false);
         }
     };
 
     Calculator.prototype.exponent = function () {
-        var lastNumber = this.screen.innerHTML.match(/[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/g).pop(),
-            lastChar = this.screen.innerHTML.slice(-1) || 0;
+        var last = this.calculation.match(/([-+]?[0-9]+\.?[0-9]*[eE]?[0-9]*)/g).pop();
 
-        // You can has E if:
-        // last char is number AND no E in number AND number is not 0.
-        if (/\d/.test(lastChar) === true && /e/.test(lastNumber) === false && lastNumber !== "0") {
-            this.screen.innerHTML += "e";
-            this.calculation += "e";
-            this.isAnswer = false;
+        if (last.indexOf('e') === -1)
+        {
+            this.print('e', 'e', false);
         }
     };
 
     Calculator.prototype.pi = function () {
-        if (this.screen.innerHTML === "0" || this.isAnswer) {
-            this.screen.innerHTML = "&pi;";
-            this.calculation = Math.PI;
-        } else {
-            this.screen.innerHTML += "&pi;";
-            this.calculation += Math.PI;
-        }
-        this.isAnswer = false;
+        this.print('&pi;', Math.PI);
     };
+
     // Various operations.
     Calculator.prototype.plus = function () {
-        this.screen.innerHTML += "+";
-        this.calculation += "+";
-        this.isAnswer = false;
+        this.print('+', '+', false);
     };
+
     Calculator.prototype.minus = function () {
-        this.screen.innerHTML += "-";
-        this.calculation += "-";
-        this.isAnswer = false;
+        this.print('-', '-', false);
     };
+
     Calculator.prototype.divide = function () {
-        this.screen.innerHTML += "&divide;";
-        this.calculation += "/";
-        this.isAnswer = false;
+        this.print('&divide;', '/', false);
     };
+
     Calculator.prototype.multiple = function () {
-        this.screen.innerHTML += "&times;";
-        this.calculation += "*";
-        this.isAnswer = false;
+        this.print('&times;', '*', false);
     };
 
     // Map keycode to function.
@@ -226,12 +208,19 @@
         27: "clear",
         37: "prev",
         39: "next",
-        69: "e",
+        69: "exponent",
         106: "multiple",
+        s56: "multiple",
         107: "plus",
+        s187: "plus",
         109: "minus",
+        189: "minus",
         110: "dot",
+        190: "dot",
         111: "divide",
+        191: "divide",
+        s57: "(",
+        s48: ")",
         48: "0", 49: "1", 50: "2", 51: "3", 52: "4", 53: "5", 54: "6", 55: "7", 56: "8", 57: "9",
         96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7", 104: "8", 105: "9"
     };
